@@ -13,6 +13,6 @@ RUN export PATH=${JAVA_HOME}/bin:${PATH}
 ENV JAVA_HOME=/jdk-18
 ENV PATH=${JAVA_HOME}/bin:${PATH}
 
-ADD target/redis-and-loom-1.0-jar-with-dependencies.jar app.jar
+ADD worker/target/worker-1.0-jar-with-dependencies.jar app.jar
 
 ENTRYPOINT ["java","-jar","/app.jar"]
