@@ -51,6 +51,7 @@ public class RedisManager extends RedisManagerBase {
     public void sendResultData(final ResultData resultData) {
         executorService.execute(() -> {
             try (var jedis = initialize()) {
+                LOG.info("Result: {}", resultData.toJSON());
                 jedis.publish(TASK_FINISHED_CH, resultData.toJSON());
             }
         });

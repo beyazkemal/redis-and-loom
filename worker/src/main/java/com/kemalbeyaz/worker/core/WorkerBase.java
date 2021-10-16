@@ -35,14 +35,14 @@ public abstract class WorkerBase<T> implements Worker {
 
         for (int i = 0; i < taskData.getConnectionCount(); i++) {
             executorService.execute(() -> {
-                T connection = getConnection();
+                final T connection = getConnection();
 
                 for (int j = 0; j < taskData.getLoopCount(); j++) {
 
                     Thread.startVirtualThread(() -> {
-                        var start = LocalDateTime.now();
+                        final var start = LocalDateTime.now();
                         doSomething(connection);
-                        var now = LocalDateTime.now();
+                        final var now = LocalDateTime.now();
                         pushResultData(start, now);
                         countDownLatch.countDown();
                     });

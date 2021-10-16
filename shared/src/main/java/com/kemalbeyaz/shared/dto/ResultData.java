@@ -32,9 +32,20 @@ public class ResultData implements Serializable {
         this.duration = ChronoUnit.MILLIS.between(start, end);
     }
 
-    public void setEndTimeAndDuration(String endTime, long duration) {
-        this.endTime = endTime;
-        this.duration = duration;
+    public String getId() {
+        return id;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public long getDuration() {
+        return duration;
     }
 
     public String toJSON() {

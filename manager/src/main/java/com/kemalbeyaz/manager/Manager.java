@@ -29,7 +29,6 @@ public class Manager {
         redisManager.getCountDownLatchForServiceCreation().await();
         executorService.execute(redisManager::unSubscribeToServiceStartedTopic);
         executorService.execute(() -> redisManager.publishToTaskTopic(arguments.toTaskData()));
-        TimeUnit.SECONDS.sleep(3);
 
         // delete services after job is done!
         LOG.info("Waiting for all tasks to finish...");
