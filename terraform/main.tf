@@ -79,7 +79,7 @@ resource "aws_ecs_task_definition" "redis_demo_super_task" {
       "name": "redis-demo-super-task",
       "image": "${data.aws_ecr_repository.redis_demo_super_ecr.repository_url}:latest",
       "essential": true,
-      "memory": 2048,
+      "memory": 8192,
       "cpu": 4096,
       "environment": [
                   {
@@ -103,8 +103,8 @@ resource "aws_ecs_task_definition" "redis_demo_super_task" {
   requires_compatibilities = ["FARGATE"]
   # Using awsvpc as our network mode as this is required for Fargate
   network_mode             = "awsvpc"
-  memory                   = 2048
-  cpu                      = 1024
+  memory                   = 8192
+  cpu                      = 4096
   execution_role_arn       = aws_iam_role.ecs_tasks_execution_role.arn
 }
 
