@@ -80,7 +80,7 @@ resource "aws_ecs_task_definition" "redis_demo_super_task" {
       "image": "${data.aws_ecr_repository.redis_demo_super_ecr.repository_url}:latest",
       "essential": true,
       "memory": 2048,
-      "cpu": 1024,
+      "cpu": 4096,
       "environment": [
                   {
                       "name": "REDIS_HOST",

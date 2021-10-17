@@ -2,9 +2,11 @@ package com.kemalbeyaz.manager;
 
 import com.kemalbeyaz.manager.cluster.AwsClusterManager;
 import com.kemalbeyaz.manager.redis.RedisManager;
+import com.kemalbeyaz.shared.dto.ResultData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Set;
 import java.util.concurrent.*;
 
 public class Manager {
@@ -36,9 +38,30 @@ public class Manager {
         clusterManager.deleteService(arguments.getServiceName());
 
         // calculate data and write txt
-        redisManager.getResultDataSet().forEach(a -> System.out.println(a.toString()));
+        logResultData(redisManager.getResultDataSet());
 
         TimeUnit.SECONDS.sleep(10);
         System.exit(1);
+    }
+
+    private static void logResultData(final Set<ResultData> resultDataSet) {
+        var minDuration = resultDataSet.stream()
+                .map(ResultData::getDuration)
+                .min(Long::compareTo)
+                .get();
+
+        var maxDuration = resultDataSet.stream()
+                .map(ResultData::getDuration)
+                .max(Long::compareTo)
+                .get();
+
+        var sumDuration = resultDataSet.stream()
+                .map(ResultData::getDuration)
+                .reduce(Long::sum)
+                .get();
+
+        var avg = sumDuration / resultDataSet.size();
+
+        LOG.info("Min: {}, Max: {}, Avg: {}", minDuration, maxDuration, avg);
     }
 }

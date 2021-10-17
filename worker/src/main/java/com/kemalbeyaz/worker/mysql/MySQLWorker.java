@@ -15,11 +15,6 @@ public class MySQLWorker extends WorkerBase<String> {
     }
 
     @Override
-    protected void initializeConnectionPool() {
-
-    }
-
-    @Override
     protected String getConnection() {
         return null;
     }

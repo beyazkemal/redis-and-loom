@@ -16,7 +16,7 @@ public class RedisManager extends RedisManagerBase {
 
     private static final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(200);
     private static final ExecutorService executorService =
-            new ThreadPoolExecutor(10, 20, 0, TimeUnit.MILLISECONDS, workQueue);
+            new ThreadPoolExecutor(20, 40, 0, TimeUnit.MILLISECONDS, workQueue);
 
     public void subscribeToChannels(final AtomicReference<TaskData> taskDataRef, final CountDownLatch taskLatch) {
         var jedisPubSub = new JedisPubSub() {

@@ -15,11 +15,6 @@ public class LazyWorker extends WorkerBase<String> {
     }
 
     @Override
-    protected void initializeConnectionPool() {
-        LOG.info("Connection pool initialized.");
-    }
-
-    @Override
     protected String getConnection() {
         return null;
     }

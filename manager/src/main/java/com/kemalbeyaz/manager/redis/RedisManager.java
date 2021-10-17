@@ -22,7 +22,7 @@ public class RedisManager extends RedisManagerBase {
     public RedisManager(final Arguments arguments) {
         super();
         this.countDownLatchForServiceCreation = new CountDownLatch(arguments.getServiceCount());
-        this.countDownLatchForTaskFinished = new CountDownLatch(arguments.getConnectionCount() * arguments.getLoopCount());
+        this.countDownLatchForTaskFinished = new CountDownLatch(calculateLatchSize(arguments));
         LOG.info("Redis Manager initialized.");
     }
 
@@ -46,7 +46,7 @@ public class RedisManager extends RedisManagerBase {
                     ResultData resultData = ResultData.fromJSON(message);
                     resultDataSet.add(resultData);
                     countDownLatchForTaskFinished.countDown();
-                    LOG.info("Finished: {}", resultData.toString());
+                    LOG.info("{} Finished: {}", countDownLatchForTaskFinished.getCount(), resultData.toString());
                 }
             }
         };
@@ -81,5 +81,9 @@ public class RedisManager extends RedisManagerBase {
 
     public CountDownLatch getCountDownLatchForTaskFinished() {
         return countDownLatchForTaskFinished;
+    }
+
+    private int calculateLatchSize(final Arguments arguments) {
+        return arguments.getServiceCount() * arguments.getConnectionCount() * arguments.getLoopCount();
     }
 }

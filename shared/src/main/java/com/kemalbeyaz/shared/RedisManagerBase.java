@@ -13,11 +13,12 @@ public abstract class RedisManagerBase {
     protected static final String TASK_CH = "task";
     protected static final String TASK_FINISHED_CH = "taskFinished";
     protected static final String UNSUBSCRIBE = "unsubscribe";
+    public static final String REDIS_HOST_ENV = "REDIS_HOST";
 
     public RedisManagerBase() {
-        String redisHost = System.getenv("REDIS_HOST");
+        String redisHost = System.getenv(REDIS_HOST_ENV);
         if(redisHost != null && !redisHost.isEmpty()) {
-            LOG.info("REDIS HOST: " + redisHost);
+            LOG.info("{}: {}",REDIS_HOST_ENV, redisHost);
             REDIS_HOST = redisHost;
         }
     }
