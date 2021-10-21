@@ -29,4 +29,9 @@ public class LazyWorker extends WorkerBase<String> {
             LOG.warn("Error occur while doing something: ", e);
         }
     }
+
+    @Override
+    protected void closeConnection(String connection) {
+        LOG.info("Connection closed.");
+    }
 }

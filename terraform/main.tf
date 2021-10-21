@@ -23,12 +23,26 @@ variable "aws_region" {
 resource "aws_elasticache_cluster" "super_redis_cluster" {
   cluster_id           = "super-redis-cluster"
   engine               = "redis"
-  node_type            = "cache.m4.large"
+  node_type            = "cache.m4.large" // 2 vCPU, 6 GB RAM
   num_cache_nodes      = 1
   parameter_group_name = "default.redis6.x"
   engine_version       = "6.x"
   port                 = 6379
   az_mode              = "single-az"
+}
+
+# MySQL
+resource "aws_db_instance" "super_mysql" {
+  instance_class       = "db.m6g.large" // 2 vCPU, 8 GB RAM
+  engine               = "mysql"
+  engine_version       = "8.0.23"
+  name                 = "super_mysql"
+  username             = "admin"
+  password             = "SXIToq70IBqv9Hmz"
+  parameter_group_name = "default.mysql8.0"
+  publicly_accessible  = true
+  multi_az             = false
+  allocated_storage    = 50
 }
 
 # IAM Policy for Task Execution Role
@@ -85,6 +99,18 @@ resource "aws_ecs_task_definition" "redis_demo_super_task" {
                   {
                       "name": "REDIS_HOST",
                       "value": "${aws_elasticache_cluster.super_redis_cluster.cache_nodes.0.address}"
+                  },
+                  {
+                      "name": "MYSQL_HOST",
+                      "value": "${aws_db_instance.super_mysql.endpoint}"
+                  },
+                  {
+                      "name": "MYSQL_USERNAME",
+                      "value": "${aws_db_instance.super_mysql.username}"
+                  },
+                  {
+                      "name": "MYSQL_PASSWORD",
+                      "value": "${aws_db_instance.super_mysql.password}"
                   }
       ],
       "logConfiguration": {

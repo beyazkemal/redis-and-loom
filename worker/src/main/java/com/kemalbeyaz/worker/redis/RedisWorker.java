@@ -39,6 +39,11 @@ public class RedisWorker extends WorkerBase<Pipeline> {
         connection.set(KEY_PREFIX + s, s);
     }
 
+    @Override
+    protected void closeConnection(Pipeline connection) {
+        connection.close();
+    }
+
     protected synchronized static Jedis initializeRedisConnection() {
         var hp = new HostAndPort(REDIS_HOST, 6379);
         return new Jedis(hp);
