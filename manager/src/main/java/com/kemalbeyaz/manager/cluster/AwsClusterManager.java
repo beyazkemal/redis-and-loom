@@ -1,6 +1,5 @@
 package com.kemalbeyaz.manager.cluster;
 
-import com.kemalbeyaz.manager.redis.RedisManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
@@ -10,6 +9,7 @@ import software.amazon.awssdk.services.ecs.model.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AwsClusterManager {
 
@@ -18,6 +18,7 @@ public class AwsClusterManager {
     private static final String TASK_NAME = "redis-demo-super-task";
     private static final List<String> SUBNET_IDS =
             new ArrayList<>(Arrays.asList("subnet-03341a4e36d1eac32", "subnet-0a034690926e2b852", "subnet-00706ac17c0a1971d"));
+    private static final AtomicBoolean SERVICE_DELETED = new AtomicBoolean(false);
 
     public AwsClusterManager() {
         LOG.info("AWS Cluster Manager initialized.");
@@ -31,6 +32,7 @@ public class AwsClusterManager {
 
         try (var ecsClient = getEcsClient()) {
             var createServiceResponse = ecsClient.createService(createServiceRequest);
+            SERVICE_DELETED.set(false);
             LOG.info("ECS services created!");
 
             List<Deployment> deployments = createServiceResponse.service().deployments();
@@ -39,11 +41,16 @@ public class AwsClusterManager {
     }
 
     public void deleteService(String serviceName) {
+        if(SERVICE_DELETED.get()) {
+            LOG.info("ECS services already deleted!");
+            return;
+        }
 
         var deleteServiceRequest = createDeleteServiceRequest(serviceName);
 
         try (var ecsClient = getEcsClient()) {
             var deleteServiceResponse = ecsClient.deleteService(deleteServiceRequest);
+            SERVICE_DELETED.set(true);
             LOG.info("ECS services deleted!");
             System.out.println(deleteServiceResponse);
         }

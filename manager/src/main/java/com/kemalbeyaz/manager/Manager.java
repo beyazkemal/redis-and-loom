@@ -27,6 +27,9 @@ public class Manager {
         AwsClusterManager clusterManager = new AwsClusterManager();
         clusterManager.createService(arguments.getServiceName(), arguments.getServiceCount());
 
+        Runtime.getRuntime()
+                .addShutdownHook(new Thread(() -> clusterManager.deleteService(arguments.getServiceName())));
+
         LOG.info("Waiting for all services to start...");
         redisManager.getCountDownLatchForServiceCreation().await();
         executorService.execute(redisManager::unSubscribeToServiceStartedTopic);

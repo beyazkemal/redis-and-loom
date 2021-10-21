@@ -89,7 +89,7 @@ public class MySQLWorker extends WorkerBase<Connection> {
         config.setJdbcUrl("jdbc:mysql://" + MYSQL_HOST + "/super_mysql");
         config.setUsername(MYSQL_USERNAME);
         config.setPassword(MYSQL_PASSWORD);
-        config.setJdbcUrl("com.mysql.jdbc.Driver");
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
         config.setMinimumIdle(taskData.getConnectionCount());
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");

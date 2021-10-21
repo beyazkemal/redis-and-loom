@@ -58,8 +58,8 @@ public abstract class WorkerBase<T> implements Worker {
             doSomething(connection);
             final var now = LocalDateTime.now();
             pushResultData(start, now);
-            countDownLatch.countDown();
             latchForConnection.countDown();
+            countDownLatch.countDown();
         });
     }
 
@@ -69,7 +69,7 @@ public abstract class WorkerBase<T> implements Worker {
 
     private void waitForConnectionClose(T connection, CountDownLatch latchForConnection) {
         try {
-            latchForConnection.wait();
+            latchForConnection.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
